@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site avec Onglets</title>
+    <style>
+        /* Style global */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+        }
+
+        /* Barre de navigation (onglets) */
+        .navbar {
+            display: flex;
+            justify-content: center;
+            background-color: #333;
+            padding: 10px 0;
+        }
+
+        .navbar a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .navbar a:hover {
+            background-color: #575757;
+        }
+
+        .navbar a.active {
+            background-color: #ff8c00;
+        }
+
+        /* Sections de contenu */
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Style de la calculatrice */
+        .calculator {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        input[type="text"] {
+            width: 250px;
+            height: 50px;
+            margin-bottom: 10px;
+            text-align: right;
+            font-size: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 80px;
+            height: 80px;
+            font-size: 20px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #ddd;
+        }
+
+        .operator {
+            background-color: #f4a261;
+            color: white;
+        }
+
+        .operator:hover {
+            background-color: #e76f51;
+        }
+
+        .equal {
+            background-color: #2a9d8f;
+            color: white;
+        }
+
+        .equal:hover {
+            background-color: #264653;
+        }
+
+        .clear {
+            background-color: #e63946;
+            color: white;
+        }
+
+        .clear:hover {
+            background-color: #d62828;
+        }
+
+        .calculator-advanced {
+            background-color: #2c3e50;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .display {
+            width: 100%; /* La barre de calcul s'étend sur toute la largeur de la calculatrice */
+            height: 50px;
+            background-color: #34495e;
+            color: white;
+            text-align: right;
+            font-size: 1.5em;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            cursor: text;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            position: relative;
+        }
+
+        .button {
+            background-color: #3498db;
+            color: white;
+            font-size: 1.5em;
+            border: none;
+            padding: 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%; /* Large buttons */
+        }
+
+        .button:hover {
+            background-color: #2980b9;
+        }
+
+        .button:active {
+            background-color: #1c5980;
+        }
+
+        .button.operator {
+            background-color: #e74c3c;
+        }
+
+        .button.operator:hover {
+            background-color: #c0392b;
+        }
+
+        .button.equal {
+            background-color: #2ecc71;
+            grid-column: span 2; /* Button spans two columns */
+        }
+
+        .button.equal:hover {
+            background-color: #27ae60;
+        }
+
+        .button.clear {
+            background-color: #95a5a6;
+        }
+
+        .button.clear:hover {
+            background-color: #7f8c8d;
+        }
+
+        .button.fun {
+            background-color: #9b59b6;
+        }
+
+        .button.fun:hover {
+            background-color: #8e44ad;
+        }
+
+        .button.trig {
+            background-color: #f39c12;
+        }
+
+        .button.trig:hover {
+            background-color: #e67e22;
+        }
+
+        .button.constant {
+            background-color: #2ecc71;
+        }
+
+        .button.constant:hover {
+            background-color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barre de navigation -->
+    <div class="navbar">
+        <a href="#classic" class="tab-link active" data-tab="classic">Calculatrice classique</a>
+        <a href="#advanced" class="tab-link" data-tab="advanced">Calculatrice avancée</a>
+    </div>
+
+    <!-- Section "Calculatrice classique" -->
+    <div id="classic" class="tab-content active">
+        <div class="calculator">
+            <input type="text" id="display" placeholder="Entrez votre opération" oninput="updateDisplay()" />
+            <br>
+            <!-- Row 1 -->
+            <button onclick="appendToDisplay('(')">(</button>
+            <button onclick="appendToDisplay(')')">)</button>
+            <button onclick="appendToDisplay('%')">%</button>
+            <button class="clear" onclick="clearDisplay()">AC</button>
+            <br>
+            <!-- Row 2 -->
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button class="operator" onclick="appendToDisplay('÷')">÷</button>
+            <br>
+            <!-- Row 3 -->
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button class="operator" onclick="appendToDisplay('×')">×</button>
+            <br>
+            <!-- Row 4 -->
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button class="operator" onclick="appendToDisplay('-')">-</button>
+            <br>
+            <!-- Row 5 -->
+            <button onclick="appendToDisplay('0')">0</button>
+            <button onclick="appendToDisplay('.')">.</button>
+            <button class="equal" onclick="calculate()">=</button>
+            <button class="operator" onclick="appendToDisplay('+')">+</button>
+        </div>
+    </div>
+
+    <!-- Section "Calculatrice avancée" -->
+    <div id="advanced" class="tab-content">
+        <div class="calculator-advanced">
+            <input id="display-advanced" class="display" type="text" />
+            <div class="buttons">
+                <button class="button clear" onclick="clearDisplayAdvanced()">C</button>
+                <button class="button operator" onclick="appendValueAdvanced('÷')">÷</button>
+                <button class="button operator" onclick="appendValueAdvanced('x')">x</button>
+                <button class="button operator" onclick="appendValueAdvanced('-')">-</button>
+                <button class="button operator" onclick="appendValueAdvanced('+')">+</button>
+                <button class="button operator" onclick="appendValueAdvanced('%')">%</button>
+
+                <button class="button" onclick="appendValueAdvanced('7')">7</button>
+                <button class="button" onclick="appendValueAdvanced('8')">8</button>
+                <button class="button" onclick="appendValueAdvanced('9')">9</button>
+                <button class="button fun" onclick="appendValueAdvanced('Math.sqrt(')">√</button>
+                <button class="button fun" onclick="appendValueAdvanced('Math.pow(')">x²</button>
+                <button class="button constant" onclick="appendValueAdvanced('Math.PI')">π</button>
+
+                <button class="button" onclick="appendValueAdvanced('4')">4</button>
+                <button class="button" onclick="appendValueAdvanced('5')">5</button>
+                <button class="button" onclick="appendValueAdvanced('6')">6</button>
+                <button class="button fun" onclick="appendValueAdvanced('Math.exp(')">exp</button>
+                <button class="button fun" onclick="appendValueAdvanced('Math.log(')">ln</button>
+                <button class="button constant" onclick="appendValueAdvanced('Math.E')">e</button>
+
+                <button class="button" onclick="appendValueAdvanced('1')">1</button>
+                <button class="button" onclick="appendValueAdvanced('2')">2</button>
+                <button class="button" onclick="appendValueAdvanced('3')">3</button>
+                <button class="button trig" onclick="appendValueAdvanced('Math.sin(')">sin</button>
+                <button class="button trig" onclick="appendValueAdvanced('Math.cos(')">cos</button>
+                <button class="button trig" onclick="appendValueAdvanced('Math.tan(')">tan</button>
+
+                <button class="button" onclick="appendValueAdvanced('0')">0</button>
+                <button class="button" onclick="appendValueAdvanced('.')">.</button>
+                <button class="button" onclick="appendValueAdvanced('Math.abs(')">|x|</button>
+                <button class="button" onclick="appendValueAdvanced('Math.floor(')">floor</button>
+                <button class="button" onclick="appendValueAdvanced('Math.ceil(')">ceil</button>
+                <button class="button equal" onclick="calculateResultAdvanced()">=</button>
+
+                <button class="button" onclick="appendValueAdvanced('(')">(</button>
+                <button class="button" onclick="appendValueAdvanced(')')">)</button>
+                <button class="button" onclick="appendValueAdvanced('Math.acos(')">acos</button>
+                <button class="button" onclick="appendValueAdvanced('Math.asin(')">asin</button>
+
+                <button class="button" onclick="appendValueAdvanced('Math.log10(')">log10</button>
+                <button class="button" onclick="appendValueAdvanced('Math.random()')">random</button>
+
+                <button class="button" onclick="appendValueAdvanced('Math.max(')">max</button>
+                <button class="button" onclick="appendValueAdvanced('Math.min(')">min</button>
+                <button class="button" onclick="appendValueAdvanced('Math.round(')">round</button>
+                <button class="button" onclick="appendValueAdvanced('Math.cbrt(')">cbrt</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour ajouter une valeur au display classique
+        function appendToDisplay(value) {
+            document.getElementById('display').value += value;
+        }
+
+        // Fonction pour calculer l'expression classique
+        function calculate() {
+            let display = document.getElementById('display');
+            let expression = display.value;
+            expression = expression.replace(/×/g, '*').replace(/÷/g, '/').replace(/%/g, '/100');
+            try {
+                display.value = eval(expression);
+            } catch (e) {
+                display.value = 'Erreur';
+            }
+        }
+
+        // Fonction pour réinitialiser le display classique
+        function clearDisplay() {
+            document.getElementById('display').value = '';
+        }
+
+        // Fonction pour ajouter une valeur au display avancé
+        function appendValueAdvanced(value) {
+            document.getElementById('display-advanced').value += value;
+        }
+
+        // Fonction pour calculer l'expression avancée
+        function calculateResultAdvanced() {
+            let display = document.getElementById('display-advanced').value;
+            try {
+                display = display.replace(/x/g, '*').replace(/÷/g, '/');
+                let result = eval(display);
+                document.getElementById('display-advanced').value = result;
+            } catch (error) {
+                document.getElementById('display-advanced').value = 'Erreur';
+            }
+        }
+
+        // Fonction pour réinitialiser le display avancé
+        function clearDisplayAdvanced() {
+            document.getElementById('display-advanced').value = '';
+        }
+
+        // Script pour gérer les onglets
+        const links = document.querySelectorAll('.tab-link');
+        const contents = document.querySelectorAll('.tab-content');
+
+        links.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                links.forEach(l => l.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+
+                link.classList.add('active');
+                const target = link.getAttribute('data-tab');
+                document.getElementById(target).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
+git init
+git add 1
